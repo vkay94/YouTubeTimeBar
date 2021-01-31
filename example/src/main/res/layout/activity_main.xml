@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:menu="@menu/menu_main"
+                app:title="@string/app_name"
+                app:titleTextAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:animateLayoutChanges="true"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                tools:alpha="0.25">
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:animateLayoutChanges="true"
+                    android:id="@+id/previewPlayerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#77000000"
+                    app:controller_layout_id="@layout/exo_playback_control_view_yt"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frameLayout"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabIndicatorFullWidth="false"
+                app:tabTextAppearance="@style/TabItemTextAppearance">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_options_timebar" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <com.github.vkay94.timebar.YouTubeTimeBar
+                android:id="@+id/youtube_timeBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="0dp"
+                app:layout_constraintBottom_toTopOf="@id/tabs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frameLayout" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/youtube_timeBar"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.github.vkay94.timebar.YouTubeTimeBarPreview
+                    android:id="@+id/youtubeTimeBarPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    app:yt_chapter_title_max_width="240dp"
+                    app:yt_preview_height="90dp"
+                    app:yt_preview_width="160dp" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

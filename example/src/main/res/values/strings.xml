@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">YT-TimeBar Demo</string>
+    <string name="tab_options_timebar" translatable="false">Options</string>
+</resources>

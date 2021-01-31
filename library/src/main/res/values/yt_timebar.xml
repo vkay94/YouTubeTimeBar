@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="YouTubeTimeBar">
+        <attr name="yt_unplayed_color" format="color" />
+        <attr name="yt_played_color" format="color" />
+        <attr name="yt_buffered_color" format="color" />
+        <attr name="yt_scrubber_color" format="color" />
+
+        <attr name="yt_scrubber_size_enabled" format="dimension" />
+        <attr name="yt_scrubber_size_dragged" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="YouTubeTimeBarPreview">
+        <attr name="yt_preview_width" format="dimension" />
+        <attr name="yt_preview_height" format="dimension" />
+        <attr name="yt_chapter_title_max_width" format="dimension" />
+    </declare-styleable>
+
+    <dimen name="yt_timebar_preview_width">160dp</dimen>
+    <dimen name="yt_timebar_preview_height">90dp</dimen>
+    <dimen name="yt_timebar_preview_border">1dp</dimen>
+    <dimen name="yt_timebar_chapter_max_width">200dp</dimen>
+
+</resources>

@@ -1,0 +1,2 @@
+include ':example', ':library'
+rootProject.name='YouTubeTimeBar'

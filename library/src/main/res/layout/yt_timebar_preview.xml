@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/thumbnail_container"
+        android:layout_width="@dimen/yt_timebar_preview_width"
+        android:layout_height="@dimen/yt_timebar_preview_height"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/yt_frame_border"
+        android:padding="@dimen/yt_timebar_preview_border">
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="#444"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4.0dip"
+        android:gravity="center|top"
+        android:minHeight="34.0dip"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/thumbnail_container">
+
+        <TextView
+            android:id="@+id/chapter_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:maxWidth="210dp"
+            android:textColor="#fff"
+            android:textSize="12sp"
+            android:visibility="visible"
+            tools:text="Chapter Twenty-Eight: Modify this view's maximum width yourself" />
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:textSize="12sp"
+            tools:text="1:05:24" />
+    </LinearLayout>
+</LinearLayout>

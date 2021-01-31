@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_show_chapters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
+            android:text="Show chapters" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_chapter_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
+            android:text="Vibrate on chapter change" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_show_segments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
+            android:text="Show Segments" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_use_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
+            android:text="Show preview on drag" />
+
+    </LinearLayout>
+
+</ScrollView>
