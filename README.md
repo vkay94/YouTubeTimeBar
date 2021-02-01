@@ -2,9 +2,9 @@
 A TimeBar in YouTube-style providing Chapters, Image-Preview and Segments.
 
 <p align="center">
-  <img src="github/preview_start.png" width=300>
-  <img src="github/preview_default.png" width=300>
-  <img src="github/preview_end.png" width=300>
+  <img src="github/preview_start.png" width=280>
+  <img src="github/preview_default.png" width=280>
+  <img src="github/preview_end.png" width=280>
 </p>
 
 ## Features
@@ -156,8 +156,8 @@ The following sections provide detailed documentation for the components of the 
 
 ### Methods
 
-| Method name | Description
-| ------------- | ------------| ------|
+| Method name | Description |
+| ------------- | ------------|
 | `showScrubber() / hideScrubber()` | Shows/hides the circle red scrubber
 | `timeBarPreview(YouTubeTimeBarPreview?)`| Sets the preview View and removes it if `null` is passed
 | `getPosition()`| Returns the current playback position in milliseconds
@@ -190,8 +190,8 @@ Within the above listener you can then check via an instance check and execute c
 
 ### Methods
 
-| Method name | Description
-| ------------- | ------------| ------|
+| Method name | Description |
+| ------------- | ------------|
 | `adjustWithDisplayCutout(DisplayCutoutCompat?)` | Adjusts the padding if the device has a notch
 | `adjustWithDisplayCutout(DisplayCutout?)` | Adjusts the padding if the device has a notch (requires P)
 | `adjustWithDisplayCutout(Int, Int)` | Adjusts the padding manually by pixels (left and right)
