@@ -16,6 +16,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.github.vkay94.timebar.LibTimeBar
 import com.github.vkay94.timebar.YouTubeChapter
 import com.github.vkay94.timebar.YouTubeSegment
@@ -140,10 +142,12 @@ class MainActivity : BaseVideoActivity() {
          */
         binding.youtubeTimeBarPreview.previewListener(object : YouTubeTimeBarPreview.Listener {
             override fun loadThumbnail(imageView: ImageView, position: Long) {
-                /*
-                    In the moment no-op but here you can load preview images into the provided
-                    ImageView by using the position which is also given
-                */
+                Glide.with(this@MainActivity)
+                    .load(DataAndUtils.STORYBOARD_URL)
+                    .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
+                    .transform(GlideThumbnailTransformation(position))
+                    .placeholder(android.R.color.black)
+                    .into(imageView)
             }
 
             override fun onPreviewPositionUpdate(viewRect: Rect) {
@@ -157,6 +161,7 @@ class MainActivity : BaseVideoActivity() {
                     View.GONE else View.VISIBLE
             }
         })
+        binding.youtubeTimeBarPreview.durationPerFrame(20 * 1000)
 
         /*
             1.  This code listener simply ensures that the controls aren't hiding too soon during
