@@ -101,11 +101,10 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
      */
     fun useTitle(use: Boolean) {
         if (use) {
+            titleTextView.visibility = View.VISIBLE
+        } else {
             titleTextView.visibility = View.GONE
             titleTextView.text = ""
-            titleTextView.width = 0
-        } else {
-            titleTextView.visibility = View.VISIBLE
         }
     }
 
@@ -170,7 +169,7 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
     /**
      * Sets the title.
      */
-    fun title(title: String) = apply {
+    internal fun title(title: String) = apply {
         titleTextView.text = title
     }
 
@@ -178,7 +177,7 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
      * Sets the time text depending on the provided position in milliseconds. Uses the default
      * ExoPlayer implementation.
      */
-    fun time(millis: Long) = apply {
+    internal fun time(millis: Long) = apply {
         Util.getStringForTime(formatBuilder, formatter, millis).let {
             if (timeTextView.text != it)
                 timeTextView.text = it
