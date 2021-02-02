@@ -280,7 +280,7 @@ class MainActivity : BaseVideoActivity() {
             releasePlayer()
             initializePlayer()
             buildMediaSource(Uri.parse(DataAndUtils.videoList[index]))
-            player?.play()
+            player?.playWhenReady = true
         })
         viewModel.tbShowChapters.observe(this, { isChecked ->
             binding.youtubeTimeBar.chapters = if (isChecked) defaultChaptersList else emptyList()

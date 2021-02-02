@@ -38,12 +38,10 @@ open class BaseVideoActivity : AppCompatActivity() {
             DefaultBandwidthMeter.Builder(this@BaseVideoActivity).build()
         )
         val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory, Mp4ExtractorFactory())
-            .createMediaSource(MediaItem.fromUri(mUri))
+            .createMediaSource(mUri)
 
-        player?.apply {
-            setMediaSource(videoSource)
-            prepare()
-        }
+        player?.prepare(videoSource)
+        player?.playWhenReady = true
     }
 
     fun initializePlayer() {
@@ -55,7 +53,7 @@ open class BaseVideoActivity : AppCompatActivity() {
                     MIN_PLAYBACK_START_BUFFER,
                     MIN_PLAYBACK_RESUME_BUFFER
                 )
-                .build()
+                .createDefaultLoadControl()
 
             player = SimpleExoPlayer.Builder(this)
                 .setLoadControl(loadControl)
@@ -85,13 +83,18 @@ open class BaseVideoActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        player?.pause()
+        if (player != null) {
+            player?.playWhenReady = false
+            player?.playbackState
+        }
     }
 
     override fun onRestart() {
         super.onRestart()
-        if (player?.playbackState == Player.STATE_READY && player?.playWhenReady!!)
-            player?.play()
+        if (player?.playbackState == Player.STATE_READY && player?.playWhenReady!!) {
+            player?.playWhenReady = true
+            player?.playbackState
+        }
     }
 
     override fun onDestroy() {
