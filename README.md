@@ -21,9 +21,14 @@ The sample app lets you test the features by turning them on and off. You can fi
 
 # Download 
 
-<a href="https://github.com/vkay94/YouTubeTimeBar/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/vkay94/YouTubeTimeBar.svg" ></a>
+<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.1.0" alt="GitHub release 0.1.0">
+<img src="https://img.shields.io/badge/release-0.1.0-blue">
+</a>
+<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.1.0-exoplayer-2.11.8" alt="GitHub release 0.1.0 legacy">
+<img src="https://img.shields.io/badge/release-0.1.0--exoplayer--2.11.8-blue">
+</a>
 
-The Gradle dependency is available via [jitpack.io][jitpack].
+The Gradle dependency is available via [jitpack.io][jitpack]. There is also a version based on ExoPlayer version 2.11.8 in case your app doesn't use the latest version and its changes.
 To be able to load this library, you have to add the repository to your project's gradle file:
 
 ```gradle
@@ -57,7 +62,7 @@ The minimum API level supported by this library is API 16.
 
 The full feature consists of two Views, `YouTubeTimeBar` and `YouTubeTimeBarPreview`, but you can also use the TimeBar as standalone with chapter and segment support.
 
-### `YouTubeTimeBar`
+### YouTubeTimeBar
 
 You can either put the View as a replacement of `DefaultTimeBar` - just make sure that ExoPlayer's id is matching (`@id/exo_progress`) - or use it as a progress bar outside of the controls and update the values manually (you can find an example implementation [here][exampleMainProgress]):
 
@@ -74,33 +79,25 @@ You can either put the View as a replacement of `DefaultTimeBar` - just make sur
 </FrameLayout>
 ```
 
-### `YouTubeTimeBarPreview`
+### YouTubeTimeBarPreview
 
-This View can be placed whereever you like, just make sure, that you don't set horizontal margins. The best way is to set the `paddingHorizontally` property to add some space to the outer ViewGroup:
+This View can be placed whereever you like, just make sure, that you don't set horizontal margins. The best way is to set the `paddingLeft` and `paddingright` properties to add some space to the outer ViewGroup:
 
 ```xml
 <com.github.vkay94.timebar.YouTubeTimeBar
     android:id="@+id/youtubePreview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontally="16dp" />
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" />
 ```
 
 ### Code implementation
 
-In the following you'll see the basic implementation in Kotlin by using the View Binding syntax. For a fully working example look for the [MainActivity][exampleMainProgress] of the example which updates the Views with a Handler.
+In the following you'll see the basic implementation in Kotlin by using the View Binding syntax. For a fully working example look for the [MainActivity][exampleMainProgress] of the example which updates the Views periodically with a Handler.
 
 ```kotlin
-private fun initViews() {
-
-    // Makes the preview Notch-observable so that the View goes into the Notch area like YouTube
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
-            binding.youtubePreview.adjustWithDisplayCutout(insets.displayCutout)
-            return@setOnApplyWindowInsetsListener insets
-        }
-    }
-  
+fun initViews() {
     // Add the listener to react on the events
     binding.youtubeTimeBar.addSegmentListener(object : LibTimeBar.SegmentListener 
         override fun onSegmentChanged(timeBar: LibTimeBar, newSegment: YouTubeSegment?) {
@@ -141,7 +138,7 @@ private fun initViews() {
 
 The following sections provide detailed documentation for the components of the library. All public methods are described in the KDoc. You can also check the MainActivity of the example package [here][exampleMainProgress] for a sample implementation seen in the demo app.
 
-## `YouTubeTimeBar`
+## YouTubeTimeBar
 
 ### XML attributes
 
@@ -156,25 +153,36 @@ The following sections provide detailed documentation for the components of the 
 
 ### Methods
 
-| Method name | Description |
-| ------------- | ------------|
-| `showScrubber() / hideScrubber()` | Shows/hides the circle red scrubber
-| `timeBarPreview(YouTubeTimeBarPreview?)`| Sets the preview View and removes it if `null` is passed
-| `getPosition()`| Returns the current playback position in milliseconds
-| `getDuration()`| Returns the duration in milliseconds
-| `getBufferedPosition()`| Returns the buffered position in milliseconds
+```kotlin
+// Shows / hides the scrubber circle.
+fun showScrubber() / hideScrubber()
+
+// Sets the Preview-View to the TimeBar. If `null` is passed the Preview-View is removed from this TimeBar.
+fun timeBarPreview(preview: YouTubeTimeBarPreview?)
+
+// Returns the current playback position / total duration / buffered position in millisenconds.
+fun getPosition() / fun getDuration() / fun getBufferedPosition()
+```
 
 ### LibTimeBar.SegmentListener
 
 This interface listens for chapter and segment changes. You can add it with `addSegmentListener(listener)`.
 
-*onChapterChanged*: Fired when a chapter is changed during scrubbing.
+```kotlin
+// Called when the current position has _entered_ the segment interval, either by progress update or releasing the drag on it.
+fun onSegmentChanged(timeBar: LibTimeBar, newSegment: YouTubeSegment?)
 
-*onSegmentChanged*: Fired when a segment is _entered_, either by progress update or stop the dragging within the segment area.
+// Called when the chapter changes during dragging.
+fun onChapterChanged(timeBar: LibTimeBar, newChapter: YouTubeChapter, drag: Boolean)
+```
 
-### `YouTubeChapter` and `YouTubeSegment`
+### *YouTubeChapter* and *YouTubeSegment*
 
-`YouTubeChapter` is an interface which required a start time and a title. For example, let a data class implement it. `YouTubeSegment` requires a start and end time + some color to highlight the segment.
+`YouTubeChapter` is an interface which requires a start time and a title. For example, let a data class implement it. `YouTubeSegment` requires a start and end time + some color to highlight the segment:
+
+```kotlin
+data class CustomChapter(val id: Int, override val startTimeMs: Long, override var title: String?)
+```
 
 Within the above listener you can then check via an instance check and execute code accordingly.
 
@@ -190,18 +198,37 @@ Within the above listener you can then check via an instance check and execute c
 
 ### Methods
 
-| Method name | Description |
-| ------------- | ------------|
-| `adjustWithDisplayCutout(DisplayCutoutCompat?)` | Adjusts the padding if the device has a notch
-| `adjustWithDisplayCutout(DisplayCutout?)` | Adjusts the padding if the device has a notch (requires P)
-| `adjustWithDisplayCutout(Int, Int)` | Adjusts the padding manually by pixels (left and right)
-| `durationPerFrame(Long)` | Sets the interval between single frames (load calls during scrubbing) in milliseconds
-| `useTitle(Boolean` | Whether to show the title of chapters
-| `show(Long) / hide(Long)` | Shows / hides the View with fading effect
+```kotlin
+// Makes the View Notch-observable. If set, the View _goes_ into the Notch-Area (Compat version).
+fun adjustWithDisplayCutout(cutout: DisplayCutoutCompat?)
+
+// Makes the View Notch-observable. If set, the View _goes_ into the Notch-Area (Android P+ version).
+fun adjustWithDisplayCutout(cutout: DisplayCutout?)
+
+// Sets the pixels manually (not recommended, but it's possible is required).
+fun adjustWithDisplayCutout(leftPixels: Int, rightPixels: Int)
+
+// Sets the interval between single frames (load calls during scrubbing) in milliseconds.
+fun durationPerFrame(duration: Long)
+
+// Whether to show the title of chapters.
+fun useTitle(use: Boolean)
+
+// Shows / hides the Preview-View with an alpha animation. The default duration is 300 milliseconds.
+fun show(duration: Long) / fun hide(duration: Long)
+```
 
 ### YouTubeTimeBarPreview.Listener
 
 This interface lets you load the currect frame depending on the position to the ImageView. Optionally you can also listen for intersection (I recommend the [MainActivity implementation][exampleMainProgress] for a better understanding).
+
+```kotlin
+// Called during scrubbing and passes the current scrubbing position. The ImageView is the one within the frame.
+fun loadThumbnail(imageView: ImageView, position: Long)
+
+// Called when the bounds of the whole view are changed. Lets you react for intersections.
+fun onPreviewPositionUpdate(viewRect: Rect)
+```
 
 *loadThumbnail*: Fired on drag whenever the seek position is outside of the interval defined by `YouTubeTimeBar.durationPerFrame(millis)`.
 
