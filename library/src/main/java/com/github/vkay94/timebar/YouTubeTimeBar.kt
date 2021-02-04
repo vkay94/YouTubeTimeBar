@@ -198,9 +198,9 @@ class YouTubeTimeBar @JvmOverloads constructor(
             }
         }
         timeBarPreview?.let {
+            it.updatePosition(scrubberPositionScreen, scrubPosition)
             it.show()
             it.time(scrubPosition)
-            it.updatePosition(scrubberPositionScreen, scrubPosition)
         }
     }
 
@@ -211,13 +211,12 @@ class YouTubeTimeBar @JvmOverloads constructor(
             }
         }
         timeBarPreview?.let {
-            it.time(scrubPosition)
             it.updatePosition(scrubberPositionScreen, scrubPosition)
+            it.time(scrubPosition)
         }
     }
 
     private fun libStopScrubbing() {
-        timeBarPreview?.updatePosition(scrubberPositionScreen, scrubPosition)
         timeBarPreview?.hide()
     }
 
