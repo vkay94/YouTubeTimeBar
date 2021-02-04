@@ -44,6 +44,14 @@
             android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
             android:text="Show preview on drag" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_use_preview_only"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingVertical="@dimen/adjustment_fragment_switch_vertical_padding"
+            android:text="Hide texts and show preview only" />
+
     </LinearLayout>
 
 </ScrollView>

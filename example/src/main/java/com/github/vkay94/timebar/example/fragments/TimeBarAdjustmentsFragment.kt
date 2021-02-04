@@ -48,6 +48,11 @@ class TimeBarAdjustmentsFragment : Fragment() {
             binding.switchChapterVibrate.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.tbVibrateChapter.value = isChecked
             }
+
+            binding.switchUsePreviewOnly.isChecked = false
+            binding.switchUsePreviewOnly.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.tbUsePreviewOnly.value = isChecked
+            }
         }
     }
 

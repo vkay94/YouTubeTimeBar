@@ -139,6 +139,9 @@ class MainActivity : BaseVideoActivity() {
             2.  (optional) Lets you react on overlapping: The preview view has bounds. If it intersects with
                 other views, for example the current playback TextView, you can hide the TextView
                 and show it again when it's not overlapping anymore
+
+            3.  (optional) Lets you set a custom time string depending on the scrubber position.
+                By default, ExoPlayer's variant is used and if the overwritten method returns null.
          */
         binding.youtubeTimeBarPreview.previewListener(object : YouTubeTimeBarPreview.Listener {
             override fun loadThumbnail(imageView: ImageView, position: Long) {
@@ -159,6 +162,12 @@ class MainActivity : BaseVideoActivity() {
                 val positionViewRect = controlsBinding.exoPosition.boundingBox
                 controlsBinding.exoPosition.visibility = if (viewRect.intersect(positionViewRect))
                     View.GONE else View.VISIBLE
+            }
+
+            override fun customTimeText(scrubberPosition: Long): String? {
+                // Use your own implementation for setting the "xx:xx" text or return null/super
+                // to use the default one.
+                return super.customTimeText(scrubberPosition)
             }
         })
         binding.youtubeTimeBarPreview.durationPerFrame(20 * 1000)
@@ -291,6 +300,9 @@ class MainActivity : BaseVideoActivity() {
         })
         viewModel.tbUsePreview.observe(this, { isChecked ->
             binding.youtubeTimeBar.timeBarPreview(if (isChecked) binding.youtubeTimeBarPreview else null)
+        })
+        viewModel.tbUsePreviewOnly.observe(this, { isChecked ->
+            binding.youtubeTimeBarPreview.usePreviewOnly(isChecked)
         })
     }
 

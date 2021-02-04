@@ -10,11 +10,13 @@ class MainViewModel : ViewModel() {
     val tbShowChapters = MutableLiveData<Boolean>()
     val tbUsePreview = MutableLiveData<Boolean>()
     val tbVibrateChapter = MutableLiveData<Boolean>()
+    val tbUsePreviewOnly = MutableLiveData<Boolean>()
 
     init {
         tbShowChapters.value = true
         tbShowSegments.value = true
         tbUsePreview.value = true
         tbVibrateChapter.value = false
+        tbUsePreviewOnly.value = false
     }
 }
