@@ -8,6 +8,7 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -574,6 +575,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
 
     private val barHeight: Int
     private val touchTargetHeight: Int
+    private var metricsLeft: Int = 0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -620,6 +622,8 @@ class YouTubeTimeBar @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        metricsLeft = left
+
         val width: Int = right - left
         val height: Int = bottom - top
         val barY: Int = (height - touchTargetHeight) / 2
@@ -803,7 +807,8 @@ class YouTubeTimeBar @JvmOverloads constructor(
     //region Helpers: general
 
     private val touchPosition: Point = Point()
-    private val density: Float = context.resources.displayMetrics.density
+    private val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    private val density: Float = displayMetrics.density
 
     private fun resolveTouchPosition(motionEvent: MotionEvent): Point {
         touchPosition.set(motionEvent.x.toInt(), motionEvent.y.toInt())
@@ -903,10 +908,8 @@ class YouTubeTimeBar @JvmOverloads constructor(
             else -> scrubberDisabledSize
         }.div(2)
 
-    // TODO("Probably take a look here (scrubber center may not be exact to touch position on the edges),
-    //  but it should be fine")
     private val scrubberPositionScreen: Int
-        get() = touchPosition.x
+        get() = metricsLeft + getScreenScrubber()
 
     //endregion
 
