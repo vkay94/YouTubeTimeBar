@@ -30,6 +30,9 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
     interface Listener {
         fun onPreviewPositionUpdate(viewRect: Rect) { /* no-op */ }
         fun loadThumbnail(imageView: ImageView, position: Long)
+        fun customTimeText(scrubberPosition: Long): String? {
+            return null
+        }
     }
 
     private var rootLayout: LinearLayout
@@ -178,9 +181,13 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
      * ExoPlayer implementation.
      */
     internal fun time(millis: Long) = apply {
-        Util.getStringForTime(formatBuilder, formatter, millis).let {
-            if (timeTextView.text != it)
-                timeTextView.text = it
+        if (listener?.customTimeText(millis) != null) {
+            timeTextView.text = listener?.customTimeText(millis) ?: "NULL"
+        } else {
+            Util.getStringForTime(formatBuilder, formatter, millis).let {
+                if (timeTextView.text != it)
+                    timeTextView.text = it
+            }
         }
     }
 
