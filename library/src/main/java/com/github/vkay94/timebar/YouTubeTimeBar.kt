@@ -57,6 +57,10 @@ class YouTubeTimeBar @JvmOverloads constructor(
 
     // Scrubbing stuff
     private var isScrubbing = false
+        set(value) {
+            field = value
+            calculateGapChapters()
+        }
     private var scrubberDisabledSize: Int
     private var scrubberEnabledSize: Int
     private var scrubberDraggedSize: Int
@@ -402,14 +406,13 @@ class YouTubeTimeBar @JvmOverloads constructor(
                 chapters.lastIndex -> duration
                 else -> chapters[index + 1].startTimeMs
             }
-            val gapSize = if (index == 0) 0 else defaultGapSize.toLong()
 
             when (index) {
                 0 -> {
                     result.add(
                         GapHelper(
                             startTimeMs, endTimeMs,
-                            (seekBounds.left + gapSize).toFloat(),
+                            seekBounds.left.toFloat(),
                             screenPositionOnProgressBar(endTimeMs).toFloat()
                         )
                     )
@@ -418,7 +421,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
                     result.add(
                         GapHelper(
                             startTimeMs, duration,
-                            (screenPositionOnProgressBar(startTimeMs) + gapSize).toFloat(),
+                            (screenPositionOnProgressBar(startTimeMs) + defaultGapSize).toFloat(),
                             seekBounds.right.toFloat()
                         )
                     )
@@ -427,7 +430,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
                     result.add(
                         GapHelper(
                             startTimeMs, endTimeMs,
-                            (screenPositionOnProgressBar(startTimeMs) + gapSize).toFloat(),
+                            (screenPositionOnProgressBar(startTimeMs) + defaultGapSize).toFloat(),
                             screenPositionOnProgressBar(endTimeMs).toFloat()
                         )
                     )
@@ -440,7 +443,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
     private fun drawNormalTimeBar(canvas: Canvas) {
         // UnPlayed, from the small red portion to the end // Grey
         canvas.drawRect(
-            progressBar.left.toFloat(),
+            (if (isScrubbing) seekBounds.left else progressBar.left).toFloat(),
             barTop.toFloat(),
             progressBar.right.toFloat(),
             barBottom.toFloat(),
@@ -449,18 +452,18 @@ class YouTubeTimeBar @JvmOverloads constructor(
 
         // Buffered // White
         canvas.drawRect(
-            progressBar.left.toFloat(),
+            (if (isScrubbing) seekBounds.left else progressBar.left).toFloat(),
             barTop.toFloat(),
-            bufferedBar.right.toFloat(),
+            bufferedBar.right.toFloat() - if (isScrubbing) initEdgeSize else 0,
             barBottom.toFloat(),
             bufferedPaint
         )
 
         // Played // Red
         canvas.drawRect(
-            progressBar.left.toFloat(),
+            (if (isScrubbing) seekBounds.left else progressBar.left).toFloat(),
             barTop.toFloat(),
-            positionBar.right.toFloat(),
+            positionBar.right.toFloat() - if (isScrubbing) initEdgeSize else 0,
             barBottom.toFloat(),
             playedPaint
         )
@@ -477,8 +480,11 @@ class YouTubeTimeBar @JvmOverloads constructor(
     }
 
     private fun drawChapters(canvas: Canvas) {
-        val progressPositionOnBar = screenPositionOnProgressBar(position)
-        val bufferedPositionOnBar = screenPositionOnProgressBar(bufferedPosition)
+        val progressPositionOnBar = if (isScrubbing) screenPositionOnSeekBounds(position)
+            else screenPositionOnProgressBar(position)
+
+        val bufferedPositionOnBar = if (isScrubbing) screenPositionOnSeekBounds(bufferedPosition)
+            else screenPositionOnProgressBar(bufferedPosition)
 
         gapChapters.forEach { gapHelper ->
             // Draw fully unplayed
@@ -631,8 +637,6 @@ class YouTubeTimeBar @JvmOverloads constructor(
         val seekLeft: Int = paddingLeft
         val seekRight: Int = width - paddingRight
         val progressY: Int = barY + (touchTargetHeight - barHeight) / 2
-
-        val scrubberPadding = scrubberEnabledSize / 2
 
         seekBounds.set( /* left, top, right, bottom */
             seekLeft, barY, seekRight, barY + touchTargetHeight
@@ -844,6 +848,19 @@ class YouTubeTimeBar @JvmOverloads constructor(
         return progressBar.left.plus(progressBar.width().times(millis.toFloat().div(duration))).toInt()
             .coerceAtLeast(progressBar.left)
             .coerceAtMost(progressBar.right)
+    }
+
+    /**
+     * Returns the x position which would be on the seekBounds rectangle.
+     *
+     * @param millis Time in milliseconds
+     *
+     * @return x position on the screen
+     */
+    private fun screenPositionOnSeekBounds(millis: Long): Int {
+        return seekBounds.left.plus(seekBounds.width().times(millis.toFloat().div(duration))).toInt()
+            .coerceAtLeast(seekBounds.left)
+            .coerceAtMost(seekBounds.right)
     }
 
     /**
