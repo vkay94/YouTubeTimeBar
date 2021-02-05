@@ -30,6 +30,9 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
     interface Listener {
         fun onPreviewPositionUpdate(viewRect: Rect) { /* no-op */ }
         fun loadThumbnail(imageView: ImageView, position: Long)
+        fun customTimeText(scrubberPosition: Long): String? {
+            return null
+        }
     }
 
     private var rootLayout: LinearLayout
@@ -93,18 +96,48 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
         this.positionDiff = duration
     }
 
+    private var useTitle: Boolean = true
+
     /**
      * Sets whether to use the title or not. The height of the text container (title and time)
      * keeps the same if set to `false`.
      *
+     * Passing `true` disables the _preview only_ setting.
+     *
      * @param use Use the title
      */
     fun useTitle(use: Boolean) {
+        useTitle = use
         if (use) {
+            usePreviewOnly(false)
             titleTextView.visibility = View.VISIBLE
         } else {
             titleTextView.visibility = View.GONE
             titleTextView.text = ""
+        }
+    }
+
+    private var usePreviewOnly: Boolean = false
+
+    /**
+     * Sets whether to show the preview image only or not. If set to `true` the space for the
+     * texts is reduced, so the overall height is smaller.
+     *
+     * @param previewOnly Hides the title and time texts if `true` is passed, shows it again if `false` is passed.
+     */
+    fun usePreviewOnly(previewOnly: Boolean) = apply {
+        usePreviewOnly = previewOnly
+        if (previewOnly) {
+            titleTextView.visibility = View.GONE
+            timeTextView.visibility = View.INVISIBLE
+            titleTextView.text = ""
+            timeTextView.text = ""
+            textContainer.minimumHeight = (8 * context.resources.displayMetrics.density + 0.5f).toInt()
+        } else {
+            if (useTitle)
+                titleTextView.visibility = View.VISIBLE
+            timeTextView.visibility = View.VISIBLE
+            textContainer.minimumHeight = (34 * context.resources.displayMetrics.density + 0.5f).toInt()
         }
     }
 
@@ -170,7 +203,8 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
      * Sets the title.
      */
     internal fun title(title: String) = apply {
-        titleTextView.text = title
+        if (!usePreviewOnly)
+            titleTextView.text = title
     }
 
     /**
@@ -178,9 +212,13 @@ class YouTubeTimeBarPreview(context: Context, private val attrs: AttributeSet?) 
      * ExoPlayer implementation.
      */
     internal fun time(millis: Long) = apply {
-        Util.getStringForTime(formatBuilder, formatter, millis).let {
-            if (timeTextView.text != it)
-                timeTextView.text = it
+        if (listener?.customTimeText(millis) != null) {
+            timeTextView.text = listener?.customTimeText(millis) ?: "NULL"
+        } else {
+            Util.getStringForTime(formatBuilder, formatter, millis).let {
+                if (timeTextView.text != it)
+                    timeTextView.text = it
+            }
         }
     }
 
