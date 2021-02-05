@@ -573,6 +573,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
     //region Measurement, onTouch and onLayout
 
     private val barHeight: Int
+    private val initEdgeSize: Int
     private val touchTargetHeight: Int
     private var metricsLeft: Int = 0
 
@@ -638,9 +639,9 @@ class YouTubeTimeBar @JvmOverloads constructor(
         )
 
         progressBar.set( /* left, top, right, bottom */
-            seekBounds.left + scrubberPadding,
+            seekBounds.left + initEdgeSize,
             progressY,
-            seekBounds.right - scrubberPadding,
+            seekBounds.right - initEdgeSize,
             progressY + barHeight
         )
 
@@ -916,6 +917,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
         barHeight = dpToPx(DEFAULT_BAR_HEIGHT_DP)
         touchTargetHeight = dpToPx(DEFAULT_TOUCH_TARGET_HEIGHT_DP)
         additionDragOffset = dpToPx(DEFAULT_ADDITIONAL_DRAG_OFFSET_DP)
+        initEdgeSize = dpToPx(DEFAULT_INIT_EDGE_DP)
 
         topBottomAdd = dpToPx(DEFAULT_TOP_BOTTOM_ADD)
         defaultGapSize = dpToPx(DEFAULT_GAP_SIZE)
@@ -1028,6 +1030,7 @@ class YouTubeTimeBar @JvmOverloads constructor(
         private const val DEFAULT_GAP_SIZE = 4
         private const val DEFAULT_TOP_BOTTOM_ADD = 2
         private const val DEFAULT_ADDITIONAL_DRAG_OFFSET_DP = 4
+        private const val DEFAULT_INIT_EDGE_DP = 3
 
         private const val DEFAULT_INCREMENT_COUNT = 20
         private const val STOP_SCRUBBING_TIMEOUT_MS = 1000L
