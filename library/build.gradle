@@ -12,8 +12,6 @@ android {
     defaultConfig {
         minSdkVersion build.minSdk
         targetSdkVersion build.targetSdk
-        versionCode build.libMajor + (build.libMinor * 100) + (build.libPatch * 10000)
-        versionName "$build.libMajor.$build.libMinor.$build.libPatch"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

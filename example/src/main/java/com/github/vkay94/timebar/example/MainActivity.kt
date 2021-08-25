@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.github.vkay94.timebar.LibTimeBar
 import com.github.vkay94.timebar.YouTubeChapter
@@ -148,6 +149,7 @@ class MainActivity : BaseVideoActivity() {
                 Glide.with(this@MainActivity)
                     .load(DataAndUtils.STORYBOARD_URL)
                     .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(GlideThumbnailTransformation(position))
                     .placeholder(android.R.color.black)
                     .into(imageView)
