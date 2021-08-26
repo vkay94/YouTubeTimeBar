@@ -21,11 +21,8 @@ The sample app lets you test the features by turning them on and off. You can fi
 
 # Download 
 
-<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.2.0" alt="GitHub release 0.2.0">
-<img src="https://img.shields.io/badge/release-0.2.0-blue">
-</a>
-<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.2.0-exoplayer-2.11.8" alt="GitHub release 0.2.0 legacy">
-<img src="https://img.shields.io/badge/release-0.2.0--exoplayer--2.11.8-blue">
+<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.2.0" alt="GitHub release 0.2.1">
+<img src="https://img.shields.io/badge/release-0.2.1-blue">
 </a>
 
 The Gradle dependency is available via [jitpack.io][jitpack]. To be able to load this library, you have to add the repository to your project's gradle file:

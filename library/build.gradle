@@ -3,15 +3,15 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: '../dependencies.gradle'
+
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion build.compileSdk
+    buildToolsVersion build.buildTools
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
-        versionCode libVersionCode
-        versionName "$libMajor.$libMinor.$libPatch"
+        minSdkVersion build.minSdk
+        targetSdkVersion build.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -33,13 +33,12 @@ android {
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.core:core-ktx:$versions.core_ktx"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
 
     // ExoPlayer2
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-core:$versions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer"
 }
