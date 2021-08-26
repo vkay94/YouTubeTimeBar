@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
 apply from: '../dependencies.gradle'
@@ -13,6 +14,7 @@ android {
         minSdkVersion build.minSdk
         targetSdkVersion build.targetSdk
 
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -41,4 +43,22 @@ dependencies {
     // ExoPlayer2
     implementation "com.google.android.exoplayer:exoplayer-core:$versions.exoplayer"
     implementation "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer"
+}
+
+// https://ayoubbenkhemis.medium.com/publish-android-library-with-jitpack-be00a29a8174
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.github.vkay94.timebar'
+                artifactId = 'library'
+                version = build.libMajor + (build.libMinor * 100) + (build.libPatch * 10000)
+            }
+        }
+    }
 }
