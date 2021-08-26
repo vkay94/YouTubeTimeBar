@@ -21,8 +21,8 @@ The sample app lets you test the features by turning them on and off. You can fi
 
 # Download 
 
-<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.2.0" alt="GitHub release 0.2.1">
-<img src="https://img.shields.io/badge/release-0.2.1-blue">
+<a href="https://github.com/vkay94/YouTubeTimeBar/releases/tag/0.2.2" alt="GitHub release 0.2.2">
+<img src="https://img.shields.io/badge/release-0.2.2-blue">
 </a>
 
 The Gradle dependency is available via [jitpack.io][jitpack]. To be able to load this library, you have to add the repository to your project's gradle file:
@@ -36,15 +36,18 @@ allprojects {
 }
 ```
 
-Then, in your app's directory, you can include it the same way like other libraries. Make sure that you set the comnpatibilty version to 1.8 inside `compileOptions`: 
+Then, in your app's directory, you can include it the same way like other libraries:
 
 ```gradle
 android {
     ...
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    // If you face problems during building you should try including the below lines if you
+    // haven't already
+  
+    // compileOptions {
+    //   sourceCompatibility JavaVersion.VERSION_1_8
+    //   targetCompatibility JavaVersion.VERSION_1_8
+    // }
 }
 
 dependencies {
